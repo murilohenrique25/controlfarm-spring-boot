@@ -13,12 +13,13 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "usuario")
+@Table(schema = "sistema", name = "usuario")
 @EntityListeners(AuditingEntityListener.class)
 public class Usuario implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entrega_id_seq")
+    @SequenceGenerator(name = "entrega_id_seq", sequenceName = "sistema.entrega_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true, length = 100)

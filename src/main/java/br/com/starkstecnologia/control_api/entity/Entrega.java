@@ -7,13 +7,14 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "entrega")
+@Table(schema = "sistema",name = "entrega")
 public class Entrega implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entrega_seq")
+    @SequenceGenerator(name = "entrega_seq", sequenceName = "sistema.entrega_seq", allocationSize = 1)
     @Column(name = "id_entrega")
     private Long idEntrega;
 

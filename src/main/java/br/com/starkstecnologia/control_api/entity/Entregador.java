@@ -7,14 +7,15 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "entregador")
+@Table(schema = "sistema",name = "entregador")
 public class Entregador implements Serializable{
 
 	@Serial
     private static final long serialVersionUID = 1L;
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entregador_seq")
+    @SequenceGenerator(name = "entregador_seq", sequenceName = "sistema.entregador_seq", allocationSize = 1)
     @Column(name = "id_entregador")
     private Long idEntregador;
 
