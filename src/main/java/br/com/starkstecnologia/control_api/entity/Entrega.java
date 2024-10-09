@@ -53,9 +53,6 @@ public class Entrega implements Serializable{
     @Column(name = "cupom_orcamento")
     private String cupomOrcamento;
 
-    @Column(name = "tipo_entrega")
-    private String tipoEntrega;
-
     @Column(name = "forma_pagamento")
     private String formaPagamento;
 
@@ -152,14 +149,6 @@ public class Entrega implements Serializable{
         this.cupomOrcamento = cupomOrcamento;
     }
 
-    public String getTipoEntrega() {
-        return tipoEntrega;
-    }
-
-    public void setTipoEntrega(String tipoEntrega) {
-        this.tipoEntrega = tipoEntrega;
-    }
-
     public String getFormaPagamento() {
         return formaPagamento;
     }
@@ -205,11 +194,11 @@ public class Entrega implements Serializable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Entrega entrega = (Entrega) o;
-        return Objects.equals(idEntrega, entrega.idEntrega) && Objects.equals(dataCadastroEntrega, entrega.dataCadastroEntrega) && Objects.equals(dataAssinaturaEntrega, entrega.dataAssinaturaEntrega) && Objects.equals(dataSelecaoEntrega, entrega.dataSelecaoEntrega) && Objects.equals(dataFinalizacaoEntrega, entrega.dataFinalizacaoEntrega) && Objects.equals(user, entrega.user) && Objects.equals(entregador, entrega.entregador) && Objects.equals(latitude, entrega.latitude) && Objects.equals(longitude, entrega.longitude) && Objects.equals(valorTotal, entrega.valorTotal) && Objects.equals(valorReceber, entrega.valorReceber) && Objects.equals(troco, entrega.troco) && Objects.equals(cupomOrcamento, entrega.cupomOrcamento) && Objects.equals(tipoEntrega, entrega.tipoEntrega) && Objects.equals(formaPagamento, entrega.formaPagamento) && Objects.equals(observacao, entrega.observacao) && Objects.equals(statusEntrega, entrega.statusEntrega);
+        return Objects.equals(idEntrega, entrega.idEntrega) && Objects.equals(dataCadastroEntrega, entrega.dataCadastroEntrega) && Objects.equals(dataAssinaturaEntrega, entrega.dataAssinaturaEntrega) && Objects.equals(dataSelecaoEntrega, entrega.dataSelecaoEntrega) && Objects.equals(dataFinalizacaoEntrega, entrega.dataFinalizacaoEntrega) && Objects.equals(user, entrega.user) && Objects.equals(entregador, entrega.entregador) && Objects.equals(latitude, entrega.latitude) && Objects.equals(longitude, entrega.longitude) && Objects.equals(valorTotal, entrega.valorTotal) && Objects.equals(valorReceber, entrega.valorReceber) && Objects.equals(troco, entrega.troco) && Objects.equals(cupomOrcamento, entrega.cupomOrcamento)  && Objects.equals(formaPagamento, entrega.formaPagamento) && Objects.equals(observacao, entrega.observacao) && Objects.equals(statusEntrega, entrega.statusEntrega);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idEntrega, dataCadastroEntrega, dataAssinaturaEntrega, dataSelecaoEntrega, dataFinalizacaoEntrega, user, entregador, latitude, longitude, valorTotal, valorReceber, troco, cupomOrcamento, tipoEntrega, formaPagamento, observacao, statusEntrega);
+        return Objects.hash(idEntrega, dataCadastroEntrega, dataAssinaturaEntrega, dataSelecaoEntrega, dataFinalizacaoEntrega, user, entregador, latitude, longitude, valorTotal, valorReceber, troco, cupomOrcamento,  formaPagamento, observacao, statusEntrega);
     }
 }

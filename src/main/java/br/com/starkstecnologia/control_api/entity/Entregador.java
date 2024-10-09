@@ -27,6 +27,14 @@ public class Entregador implements Serializable{
 
     private String senha;
 
+    private String turno;
+
+    private String telefone;
+
+    @ManyToOne
+    @JoinColumn(name = "id_matriz")
+    private Matriz matriz;
+
     public Long getIdEntregador() {
         return idEntregador;
     }
@@ -67,16 +75,40 @@ public class Entregador implements Serializable{
         this.senha = senha;
     }
 
+    public String getTurno() {
+        return turno;
+    }
+
+    public void setTurno(String turno) {
+        this.turno = turno;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public Matriz getMatriz() {
+        return matriz;
+    }
+
+    public void setMatriz(Matriz matriz) {
+        this.matriz = matriz;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Entregador that = (Entregador) o;
-        return ativo == that.ativo && Objects.equals(idEntregador, that.idEntregador) && Objects.equals(nome, that.nome) && Objects.equals(usuario, that.usuario) && Objects.equals(senha, that.senha);
+        return ativo == that.ativo && Objects.equals(idEntregador, that.idEntregador) && Objects.equals(nome, that.nome) && Objects.equals(usuario, that.usuario) && Objects.equals(senha, that.senha) && Objects.equals(turno, that.turno) && Objects.equals(telefone, that.telefone) && Objects.equals(matriz, that.matriz);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idEntregador, nome, usuario, ativo, senha);
+        return Objects.hash(idEntregador, nome, usuario, ativo, senha, turno, telefone, matriz);
     }
 }

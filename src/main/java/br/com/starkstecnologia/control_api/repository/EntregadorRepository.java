@@ -15,8 +15,8 @@ public interface EntregadorRepository extends JpaRepository<Entregador, Long>{
 	@Query("SELECT COUNT(e) > 0 FROM Entregador e WHERE e.usuario = :usuario")
 	   boolean verificaUsuarioJaExistente(@Param("usuario") String usuario);
 
-	@Query("SELECT e.idEntregador FROM Entregador e WHERE e.usuario=:usuario")
-	    Long findEntregadorByUsuario(@Param("usuario") String userId);
+	@Query("SELECT e FROM Entregador e WHERE e.usuario=:usuario")
+	    Entregador findEntregadorByUsuario(@Param("usuario") String userId);
 
 	@Query("SELECT e FROM Entregador e WHERE e.usuario = :userId")
 	 Entregador logarApp(@Param("userId") String userId);

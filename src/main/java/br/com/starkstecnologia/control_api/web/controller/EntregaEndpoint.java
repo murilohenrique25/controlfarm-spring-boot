@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -24,6 +25,7 @@ public class EntregaEndpoint {
         entregaService.salvarEntrega(dadosEntregaDTO);
         return ResponseEntity.status(201).build();
     }
+
     @PutMapping("/alterar")
     public ResponseEntity<?> alterarEntrega(@RequestBody DadosEntregaDTO dadosEntregaDTO){
         entregaService.alterarEntrega(dadosEntregaDTO);
@@ -41,21 +43,31 @@ public class EntregaEndpoint {
         entregaService.selecionarAtribuirAlterarEntrega(entregaDTOS, userId);
         return ResponseEntity.ok().build();
     }
+
     @PatchMapping(value = "/finalizar")
     public ResponseEntity<?> finalizarEntregaManual(@RequestBody List<DadosEntregaDTO> entregaDTOS){
         entregaService.finalizarEntregaManual(entregaDTOS);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(value = "/deletar/{idEntrega}")
-    public ResponseEntity<?> deletarEntrega(@PathVariable("idEntrega") Long idEntrega){
-        entregaService.excluirEntrega(idEntrega);
+    @PutMapping(value = "/cancelar/{idEntrega}")
+    public ResponseEntity<?> cancelarEntrega(@PathVariable("idEntrega") Long idEntrega){
+        entregaService.cancelarEntrega(idEntrega);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<?> buscarTodasEntregas(){
-       return ResponseEntity.ok(entregaService.buscarTodasEntregas());
+    public ResponseEntity<?> buscarEntregas(@RequestParam(required = false) Long idEntrega,
+                                             @RequestParam(required = false) LocalDateTime dataInicio,
+                                             @RequestParam(required = false) LocalDateTime dataTermino){
+       return ResponseEntity.ok(entregaService.buscarEntregas(idEntrega, dataInicio, dataTermino));
+    }
+
+
+
+    @GetMapping("/avulsas")
+    public ResponseEntity<?> buscarTodasEntregasAvulsas(){
+        return ResponseEntity.ok(entregaService.buscarTodasEntregasAvulsas());
     }
 
 }

@@ -22,7 +22,7 @@ public class JwtUtils {
     public static final String SECRET_KEY = "14577dfFDG4Gg4R5G4@2012Fpqppkmtb";
     public static final String SECRET_KEY_CREATED_USER = "controlFarm@2024";
     public static final long EXPIRE_DAYS = 0;
-    public static final long EXPIRE_HOURS = 1;
+    public static final long EXPIRE_HOURS = 8;
     public static final long EXPIRE_MINUTES = 0;
 
     private JwtUtils(){}

@@ -1,9 +1,6 @@
 package br.com.starkstecnologia.control_api.web.exception;
 
-import br.com.starkstecnologia.control_api.exception.EntityNotFoundException;
-import br.com.starkstecnologia.control_api.exception.PasswordInvalidException;
-import br.com.starkstecnologia.control_api.exception.ServiceException;
-import br.com.starkstecnologia.control_api.exception.UsernameUniqueViolationException;
+import br.com.starkstecnologia.control_api.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +14,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class ApiExceptionHandler {
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<ErrorMessage> erroDuplicacaoEmail(RuntimeException ex,
+                                                     HttpServletRequest request) {
+        log.error("Api Error - ", ex);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, ex.getMessage()));
+
+    }
 
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<ErrorMessage> erroGenerico(RuntimeException ex,

@@ -15,6 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
@@ -30,6 +33,7 @@ public class SpringSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Habilitar o CORS
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
@@ -37,12 +41,12 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/usuario").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
                         .requestMatchers("/api/app/v1/entregador").permitAll()
-                        .requestMatchers("/api/app/v1/entrega").permitAll()
-                        .requestMatchers("/api/app/v1/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/app/v1/entrega/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/app/v1/entrega/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/app/v1/entrega/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/app/v1/login").permitAll()
 
                         .requestMatchers(
-                                antMatcher(HttpMethod.POST, "/api/v1/usuarios"),
-                                antMatcher(HttpMethod.POST, "/api/v1/auth"),
                                 antMatcher("/docs-control.html"),
                                 antMatcher("/docs-control/**"),
                                 antMatcher("/swagger-ui.html"),
@@ -54,6 +58,19 @@ public class SpringSecurityConfig {
                 ).addFilterBefore(
                         jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class
                 ).build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*"); // Permitir qualquer origem
+        config.addAllowedHeader("*"); // Permitir todos os cabeçalhos
+        config.addAllowedMethod("*"); // Permitir todos os métodos
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
     @Bean

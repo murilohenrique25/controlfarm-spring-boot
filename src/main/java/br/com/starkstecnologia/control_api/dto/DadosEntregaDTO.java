@@ -9,10 +9,10 @@ public class DadosEntregaDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 	private Long idEntrega;
-    private LocalDateTime dataCadastroEntrega;
-    private LocalDateTime dataAssinaturaEntrega;
-    private LocalDateTime dataSelecaoEntrega;
-    private LocalDateTime dataFinalizacaoEntrega;
+    private String dataCadastroEntrega;
+    private String dataAssinaturaEntrega;
+    private String dataSelecaoEntrega;
+    private String dataFinalizacaoEntrega;
     private Long idUser;
     private Long idEntregador;
     private String latitude;
@@ -33,35 +33,35 @@ public class DadosEntregaDTO implements Serializable {
         this.idEntrega = idEntrega;
     }
 
-    public LocalDateTime getDataCadastroEntrega() {
+    public String getDataCadastroEntrega() {
         return dataCadastroEntrega;
     }
 
-    public void setDataCadastroEntrega(LocalDateTime dataCadastroEntrega) {
+    public void setDataCadastroEntrega(String dataCadastroEntrega) {
         this.dataCadastroEntrega = dataCadastroEntrega;
     }
 
-    public LocalDateTime getDataAssinaturaEntrega() {
+    public String getDataAssinaturaEntrega() {
         return dataAssinaturaEntrega;
     }
 
-    public void setDataAssinaturaEntrega(LocalDateTime dataAssinaturaEntrega) {
+    public void setDataAssinaturaEntrega(String dataAssinaturaEntrega) {
         this.dataAssinaturaEntrega = dataAssinaturaEntrega;
     }
 
-    public LocalDateTime getDataSelecaoEntrega() {
+    public String getDataSelecaoEntrega() {
         return dataSelecaoEntrega;
     }
 
-    public void setDataSelecaoEntrega(LocalDateTime dataSelecaoEntrega) {
+    public void setDataSelecaoEntrega(String dataSelecaoEntrega) {
         this.dataSelecaoEntrega = dataSelecaoEntrega;
     }
 
-    public LocalDateTime getDataFinalizacaoEntrega() {
+    public String getDataFinalizacaoEntrega() {
         return dataFinalizacaoEntrega;
     }
 
-    public void setDataFinalizacaoEntrega(LocalDateTime dataFinalizacaoEntrega) {
+    public void setDataFinalizacaoEntrega(String dataFinalizacaoEntrega) {
         this.dataFinalizacaoEntrega = dataFinalizacaoEntrega;
     }
 

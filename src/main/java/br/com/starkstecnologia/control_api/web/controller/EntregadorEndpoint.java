@@ -24,7 +24,7 @@ public class EntregadorEndpoint {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> atualizar(@PathVariable("id") Long id, DadosCaixaEntregadorDTO entregadorDTO){
+    public ResponseEntity<?> atualizar(@PathVariable("id") Long id, @RequestBody DadosCaixaEntregadorDTO entregadorDTO){
         return ResponseEntity.ok(entregadorService.atualizar(id, entregadorDTO));
     }
 
@@ -33,9 +33,14 @@ public class EntregadorEndpoint {
         return ResponseEntity.ok(entregadorService.listarTodos());
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> removerEntregador(@PathVariable("id") Long idEntregador){
-        return entregadorService.remover(idEntregador);
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable("id") Long id){
+        return ResponseEntity.ok(entregadorService.buscarPorId(id));
+    }
+
+    @PutMapping(value = "/desativar/{id}")
+    public ResponseEntity<?> desativarEntregador(@PathVariable("id") Long idEntregador){
+        return entregadorService.desativarEntregador(idEntregador);
     }
 
 }

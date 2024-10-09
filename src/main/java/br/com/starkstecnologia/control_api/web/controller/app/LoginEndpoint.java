@@ -18,7 +18,7 @@ public class LoginEndpoint {
     @Autowired
     EntregadorService entregadorService;
 
-    @GetMapping(value = "/logar")
+    @GetMapping()
     public ResponseEntity<?> logarViaApp(@RequestParam(value ="user_id") String userId, @RequestParam(value="password") String password) throws EntityNotFoundException {
         return ResponseEntity.ok(entregadorService.logarApp(userId, password));
     }
