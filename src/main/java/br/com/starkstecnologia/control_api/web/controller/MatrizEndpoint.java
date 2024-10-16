@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/empresa")
-@Tag(name = "Entrega", description = "Operações referente as entregas")
+@Tag(name = "Empresa", description = "Operações referente as empresa")
 public class MatrizEndpoint {
 
     @Autowired
@@ -32,6 +32,16 @@ public class MatrizEndpoint {
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarEmpresa(@PathVariable("id") Long idMatriz){
         return ResponseEntity.ok(matrizService.buscarMatriz(idMatriz));
+    }
+
+    @GetMapping("/matriz")
+    public ResponseEntity<?> buscarTodasEmpresa(){
+        return ResponseEntity.ok(matrizService.buscarTodasMatriz());
+    }
+
+    @GetMapping("/filial/{idMatriz}")
+    public ResponseEntity<?> buscarTodasFiliais(@PathVariable("idMatriz") Long idMatriz){
+        return ResponseEntity.ok(matrizService.buscarTodasFiliais(idMatriz));
     }
 
 }

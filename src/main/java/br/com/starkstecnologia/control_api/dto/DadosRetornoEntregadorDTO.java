@@ -1,25 +1,36 @@
 package br.com.starkstecnologia.control_api.dto;
 
-import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
-public class DadosCaixaEntregadorDTO implements Serializable {
+public class DadosRetornoEntregadorDTO implements Serializable {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
+    private Long idEntregador;
 
     private String nome;
+
     private String usuario;
-    private String senha;
+
     private boolean ativo;
-    private String turno;
-    private Long idMatriz;
+
     private String telefone;
+
+    private Long idMatriz;
+
+    private String nomeMatriz;
+
+    private String turno;
+
     private String cpf;
 
+    public Long getIdEntregador() {
+        return idEntregador;
+    }
 
-	public String getNome() {
+    public void setIdEntregador(Long idEntregador) {
+        this.idEntregador = idEntregador;
+    }
+
+    public String getNome() {
         return nome;
     }
 
@@ -35,14 +46,6 @@ public class DadosCaixaEntregadorDTO implements Serializable {
         this.usuario = usuario;
     }
 
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
     public boolean isAtivo() {
         return ativo;
     }
@@ -51,12 +54,12 @@ public class DadosCaixaEntregadorDTO implements Serializable {
         this.ativo = ativo;
     }
 
-    public String getTurno() {
-        return turno;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setTurno(String turno) {
-        this.turno = turno;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
     public Long getIdMatriz() {
@@ -67,12 +70,20 @@ public class DadosCaixaEntregadorDTO implements Serializable {
         this.idMatriz = idMatriz;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public String getNomeMatriz() {
+        return nomeMatriz;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
+    public void setNomeMatriz(String nomeMatriz) {
+        this.nomeMatriz = nomeMatriz;
+    }
+
+    public String getTurno() {
+        return turno;
+    }
+
+    public void setTurno(String turno) {
+        this.turno = turno;
     }
 
     public String getCpf() {

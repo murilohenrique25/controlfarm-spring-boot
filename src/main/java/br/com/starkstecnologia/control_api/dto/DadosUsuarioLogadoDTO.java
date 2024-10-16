@@ -3,7 +3,7 @@ package br.com.starkstecnologia.control_api.dto;
 public class DadosUsuarioLogadoDTO {
 
     private String usuario;
-    private int quantidadeEntregas;
+    private DadosEntregadorApp dadosEntregadorApp;
 
 
     public String getUsuario() {
@@ -14,11 +14,12 @@ public class DadosUsuarioLogadoDTO {
         this.usuario = usuario;
     }
 
-    public int getQuantidadeEntregas() {
-        return quantidadeEntregas;
+    public DadosEntregadorApp getDadosEntregadorApp() {
+        return dadosEntregadorApp;
     }
 
-    public void setQuantidadeEntregas(int quantidadeEntregas) {
-        this.quantidadeEntregas = quantidadeEntregas;
+    public void setDadosEntregadorApp(DadosEntregadorApp dadosEntregadorApp) {
+        this.dadosEntregadorApp = dadosEntregadorApp;
     }
 }
+

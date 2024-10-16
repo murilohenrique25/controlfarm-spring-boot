@@ -53,8 +53,13 @@ public class EntregaAppEndpoint {
     }
 
     @GetMapping(value = "/quantidade/{user_id}")
-    public ResponseEntity<?> quantiadadeEntregas(@PathVariable("user_id") String userId){
-        return ResponseEntity.ok(String.valueOf(entregadorService.getQuantidadeEntregas(userId)));
+    public ResponseEntity<?> quantidadeEntregas(@PathVariable("user_id") String userId){
+        return ResponseEntity.ok(entregadorService.getQuantidadeEntregas(userId));
+    }
+
+    @GetMapping(value = "/abertas")
+    public ResponseEntity<?> entregasEmAberto(){
+        return ResponseEntity.ok(entregadorService.buscarDadosEntregasPorNaoFinalizadasNoDiaApp());
     }
 
 }

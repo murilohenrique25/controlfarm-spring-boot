@@ -1,5 +1,6 @@
 package br.com.starkstecnologia.control_api.web.controller;
 
+import br.com.starkstecnologia.control_api.dto.DadosRetornoLoginDTO;
 import br.com.starkstecnologia.control_api.jwt.JwtToken;
 import br.com.starkstecnologia.control_api.jwt.JwtUserDetailsService;
 import br.com.starkstecnologia.control_api.web.dto.UsuarioLoginDto;
@@ -38,9 +39,7 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
             authenticationManager.authenticate(authenticationToken);
 
-            JwtToken token = detailsService.getTokenAuthenticated(dto.getUsername());
-
-            return ResponseEntity.ok(token);
+            return ResponseEntity.ok(detailsService.getTokenAuthenticated(dto.getUsername()));
         }catch (AuthenticationException ex){
             log.warn("Bad Credentials from username");
         }

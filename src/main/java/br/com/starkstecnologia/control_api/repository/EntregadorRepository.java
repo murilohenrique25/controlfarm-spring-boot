@@ -1,6 +1,7 @@
 package br.com.starkstecnologia.control_api.repository;
 
 import br.com.starkstecnologia.control_api.entity.Entregador;
+import jakarta.persistence.Tuple;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,10 +22,11 @@ public interface EntregadorRepository extends JpaRepository<Entregador, Long>{
 	@Query("SELECT e FROM Entregador e WHERE e.usuario = :userId")
 	 Entregador logarApp(@Param("userId") String userId);
 
-	@Query(value =  "SELECT COUNT(*) AS quantidade_entregas " +
+	@Query(value =  "SELECT COUNT(*) AS quantidade_entregas, " +
+						"AVG(TIMESTAMPDIFF(SECOND, e.data_selecao_entrega, e.data_selecao_entrega)) AS mediaTempo, " +
 	                    "FROM entrega JOIN entregador ON entrega.id_entregador = entregador.id_entregador " +
 	                    "WHERE EXTRACT(MONTH FROM data_finalizacao_entrega) = EXTRACT(MONTH FROM CURRENT_DATE) " +
 	                    "AND entregador.usuario = :usuario", nativeQuery = true)
-	  public int quantidadeEntregasFinalizadasMes(@Param("usuario") String userId);
+	Tuple quantidadeEntregasFinalizadasMes(@Param("usuario") String userId);
 
 }

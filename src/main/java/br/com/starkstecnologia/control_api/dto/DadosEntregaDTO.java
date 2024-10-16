@@ -3,7 +3,6 @@ package br.com.starkstecnologia.control_api.dto;
 
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 public class DadosEntregaDTO implements Serializable {
 
@@ -14,7 +13,11 @@ public class DadosEntregaDTO implements Serializable {
     private String dataSelecaoEntrega;
     private String dataFinalizacaoEntrega;
     private Long idUser;
+    private Long idUserAssinatura;
+    private String nomeUser;
+    private String nomeUserAssinatura;
     private Long idEntregador;
+    private String nomeEntregador;
     private String latitude;
     private String longitude;
     private Double valorTotal;
@@ -24,6 +27,8 @@ public class DadosEntregaDTO implements Serializable {
     private String tipoEntrega;
     private String formaPagamento;
     private String observacao;
+    private String statusEntrega;
+    private Long idMatriz;
 
     public Long getIdEntrega() {
         return idEntrega;
@@ -151,5 +156,53 @@ public class DadosEntregaDTO implements Serializable {
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
+    }
+
+    public String getStatusEntrega() {
+        return statusEntrega;
+    }
+
+    public void setStatusEntrega(String statusEntrega) {
+        this.statusEntrega = statusEntrega;
+    }
+
+    public String getNomeUser() {
+        return nomeUser;
+    }
+
+    public void setNomeUser(String nomeUser) {
+        this.nomeUser = nomeUser;
+    }
+
+    public String getNomeEntregador() {
+        return nomeEntregador;
+    }
+
+    public void setNomeEntregador(String nomeEntregador) {
+        this.nomeEntregador = nomeEntregador;
+    }
+
+    public Long getIdMatriz() {
+        return idMatriz;
+    }
+
+    public void setIdMatriz(Long idMatriz) {
+        this.idMatriz = idMatriz;
+    }
+
+    public Long getIdUserAssinatura() {
+        return idUserAssinatura;
+    }
+
+    public void setIdUserAssinatura(Long idUserAssinatura) {
+        this.idUserAssinatura = idUserAssinatura;
+    }
+
+    public String getNomeUserAssinatura() {
+        return nomeUserAssinatura;
+    }
+
+    public void setNomeUserAssinatura(String nomeUserAssinatura) {
+        this.nomeUserAssinatura = nomeUserAssinatura;
     }
 }

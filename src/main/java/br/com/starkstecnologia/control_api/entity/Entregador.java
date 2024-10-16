@@ -31,6 +31,8 @@ public class Entregador implements Serializable{
 
     private String telefone;
 
+    private String cpf;
+
     @ManyToOne
     @JoinColumn(name = "id_matriz")
     private Matriz matriz;
@@ -99,16 +101,24 @@ public class Entregador implements Serializable{
         this.matriz = matriz;
     }
 
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Entregador that = (Entregador) o;
-        return ativo == that.ativo && Objects.equals(idEntregador, that.idEntregador) && Objects.equals(nome, that.nome) && Objects.equals(usuario, that.usuario) && Objects.equals(senha, that.senha) && Objects.equals(turno, that.turno) && Objects.equals(telefone, that.telefone) && Objects.equals(matriz, that.matriz);
+        return ativo == that.ativo && Objects.equals(idEntregador, that.idEntregador) && Objects.equals(nome, that.nome) && Objects.equals(usuario, that.usuario) && Objects.equals(senha, that.senha) && Objects.equals(turno, that.turno) && Objects.equals(telefone, that.telefone) && Objects.equals(cpf, that.cpf) && Objects.equals(matriz, that.matriz);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idEntregador, nome, usuario, ativo, senha, turno, telefone, matriz);
+        return Objects.hash(idEntregador, nome, usuario, ativo, senha, turno, telefone, cpf, matriz);
     }
 }

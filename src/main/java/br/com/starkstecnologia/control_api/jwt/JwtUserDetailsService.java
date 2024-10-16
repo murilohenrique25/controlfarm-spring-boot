@@ -1,5 +1,6 @@
 package br.com.starkstecnologia.control_api.jwt;
 
+import br.com.starkstecnologia.control_api.dto.DadosRetornoLoginDTO;
 import br.com.starkstecnologia.control_api.entity.Usuario;
 import br.com.starkstecnologia.control_api.services.UsuarioService;
 import br.com.starkstecnologia.control_api.types.Role;
@@ -22,8 +23,13 @@ public class JwtUserDetailsService implements UserDetailsService {
         return new JwtUserDetails(usuario);
     }
 
-    public JwtToken getTokenAuthenticated(String username){
+    public DadosRetornoLoginDTO getTokenAuthenticated(String username){
         Role role = usuarioService.buscarRolePorUsername(username);
-        return JwtUtils.createToken(username, role.getDescricao());
+        Usuario usuario = usuarioService.buscarPorUsername(username);
+        DadosRetornoLoginDTO dadosRetornoLoginDTO = new DadosRetornoLoginDTO();
+        dadosRetornoLoginDTO.setToken(JwtUtils.createToken(username, role.getDescricao()).getToken());
+        dadosRetornoLoginDTO.setNome(usuario.getNome());
+        dadosRetornoLoginDTO.setIdUser(usuario.getId());
+        return dadosRetornoLoginDTO;
     }
 }

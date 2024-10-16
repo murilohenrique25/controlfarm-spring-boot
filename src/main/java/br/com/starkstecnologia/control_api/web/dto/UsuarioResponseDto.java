@@ -7,6 +7,7 @@ public class UsuarioResponseDto implements Serializable {
 
     private Long id;
     private String username;
+    private String nome;
     private String role;
 
     public Long getId() {
@@ -23,6 +24,14 @@ public class UsuarioResponseDto implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getRole() {

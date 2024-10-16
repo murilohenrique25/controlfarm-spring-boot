@@ -6,7 +6,7 @@ public enum StatusEntregaEnum {
     EM_ROTA("Em rota"),
     CANCELADA("Cancelada"),
     FINALIZADA("Finalizada"),
-    FINALIZADA_MANUAL_ASSINADA("Finalizada Manualmente e Assinada"),
+    FINALIZADA_MANUAL("Finalizada Manualmente"),
     FINALIZADA_ASSINADA("Finalizada e Assinada");
 
     private final String descricao;

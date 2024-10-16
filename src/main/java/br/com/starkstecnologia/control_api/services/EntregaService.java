@@ -1,19 +1,14 @@
 package br.com.starkstecnologia.control_api.services;
 
 
+import br.com.starkstecnologia.control_api.dto.DadosAtribuirFinalizarEntregaDTO;
 import br.com.starkstecnologia.control_api.dto.DadosEntregaAvulsaDTO;
 import br.com.starkstecnologia.control_api.dto.DadosEntregaDTO;
 import br.com.starkstecnologia.control_api.dto.DadosEntregaFinalizacaoDTO;
-import br.com.starkstecnologia.control_api.entity.Entrega;
-import br.com.starkstecnologia.control_api.entity.EntregaAvulsa;
-import br.com.starkstecnologia.control_api.entity.Entregador;
-import br.com.starkstecnologia.control_api.entity.Usuario;
+import br.com.starkstecnologia.control_api.entity.*;
 import br.com.starkstecnologia.control_api.exception.EntityNotFoundException;
 import br.com.starkstecnologia.control_api.exception.ServiceException;
-import br.com.starkstecnologia.control_api.repository.EntregaAvulsaRepository;
-import br.com.starkstecnologia.control_api.repository.EntregaRepository;
-import br.com.starkstecnologia.control_api.repository.EntregadorRepository;
-import br.com.starkstecnologia.control_api.repository.UsuarioRepository;
+import br.com.starkstecnologia.control_api.repository.*;
 import br.com.starkstecnologia.control_api.types.StatusEntregaEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +36,11 @@ public class EntregaService {
     @Autowired
     EntregaAvulsaRepository entregaAvulsaRepository;
 
+    @Autowired
+    MatrizRepository matrizRepository;
 
-    public void salvarEntrega(DadosEntregaDTO entregaDTO) {
+
+    public Long salvarEntrega(DadosEntregaDTO entregaDTO) {
         Entrega entrega;
         if (entregaDTO.getIdEntrega() == null) {
             entrega = new Entrega();
@@ -52,10 +50,11 @@ public class EntregaService {
         Usuario caixa = usuarioRepository.findById(entregaDTO.getIdUser()).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
         dadosEntrega(entregaDTO, entrega, caixa);
         entrega.setStatusEntrega(StatusEntregaEnum.ABERTA.getDescricao());
-        entregaRepository.save(entrega);
+        Entrega entregaSave = entregaRepository.save(entrega);
+        return entregaSave.getIdEntrega();
     }
 
-    private static void dadosEntrega(DadosEntregaDTO entregaDTO, Entrega entrega, Usuario caixa) {
+    private void dadosEntrega(DadosEntregaDTO entregaDTO, Entrega entrega, Usuario caixa) {
         entrega.setDataCadastroEntrega(LocalDateTime.now());
         entrega.setCupomOrcamento(entregaDTO.getCupomOrcamento());
         entrega.setFormaPagamento(entregaDTO.getFormaPagamento());
@@ -63,6 +62,7 @@ public class EntregaService {
         entrega.setTroco(entregaDTO.getTroco());
         entrega.setValorReceber(entregaDTO.getValorReceber());
         entrega.setObservacao(entregaDTO.getObservacao());
+        entrega.setMatriz(matrizRepository.getReferenceById(entregaDTO.getIdMatriz()));
         entrega.setUser(caixa);
     }
 
@@ -95,15 +95,23 @@ public class EntregaService {
         }
     }
 
-    public void assinarEntregaCaixa(List<DadosEntregaDTO> entregasDTO, Long idCaixa) {
-        List<Entrega> entregas = entregaRepository.buscarEntregasPorId(entregasDTO.stream().map(DadosEntregaDTO::getIdEntrega).collect(Collectors.toList()));
+    public void selecionarAtribuirAlterarEntrega(DadosAtribuirFinalizarEntregaDTO entregaDTO, Long idEntrega) {
+        Entregador entregador = entregadorRepository.findById(entregaDTO.getId()).orElseThrow(()-> new ServiceException("Entregador não encontrado"));
+        Entrega entrega = entregaRepository.findById(idEntrega).orElseThrow(()-> new ServiceException("Entrega não encontrada"));
         LocalDateTime dataAgora = LocalDateTime.now();
-        Usuario caixa = usuarioRepository.findById(idCaixa).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-        for (Entrega entrega : entregas) {
-            entrega.setDataAssinaturaEntrega(dataAgora);
-            entrega.setUser(caixa);
-            entrega.setStatusEntrega(StatusEntregaEnum.FINALIZADA_ASSINADA.getDescricao());
-        }
+            entrega.setDataSelecaoEntrega(dataAgora);
+            entrega.setEntregador(entregador);
+            entrega.setStatusEntrega(StatusEntregaEnum.EM_ROTA.getDescricao());
+    }
+
+    public void assinarEntregaCaixa(DadosAtribuirFinalizarEntregaDTO entregaDTO, Long idEntrega) {
+        Entrega entrega = entregaRepository.findById(idEntrega).orElseThrow(()-> new ServiceException("Entrega não encontrada"));
+        LocalDateTime dataAgora = LocalDateTime.now();
+        Usuario caixa = usuarioRepository.findById(entregaDTO.getId()).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+        entrega.setDataAssinaturaEntrega(dataAgora);
+        entrega.setUserAssinatura(caixa);
+        entrega.setStatusEntrega(StatusEntregaEnum.FINALIZADA_ASSINADA.getDescricao());
+
     }
 
     public void finalizarEntrega(DadosEntregaFinalizacaoDTO entregaDTO) {
@@ -113,7 +121,11 @@ public class EntregaService {
         entrega.setLatitude(entregaDTO.getLatitude());
         entrega.setLongitude(entregaDTO.getLongitude());
         entrega.setObservacao(entregaDTO.getObservacao());
-        entrega.setStatusEntrega(StatusEntregaEnum.FINALIZADA.getDescricao());
+        if(entregaDTO.getObservacao().startsWith("Não Entregue")){
+         entrega.setStatusEntrega(StatusEntregaEnum.CANCELADA.getDescricao());
+        }else {
+            entrega.setStatusEntrega(StatusEntregaEnum.FINALIZADA.getDescricao());
+        }
     }
 
     public List<DadosEntregaDTO> entregasDisponiveis() {
@@ -144,6 +156,8 @@ public class EntregaService {
             dados.setValorTotal(entrega.getValorTotal());
             dados.setDataCadastroEntrega(entrega.getDataCadastroEntrega().toString());
             dados.setObservacao(entrega.getObservacao());
+            dados.setStatusEntrega(entrega.getStatusEntrega());
+            dados.setIdMatriz(entrega.getMatriz().getIdMatriz());
             entregaDTOS.add(dados);
         }
         return entregaDTOS;
@@ -163,6 +177,7 @@ public class EntregaService {
             dados.setTroco(entrega.getTroco());
             dados.setValorReceber(entrega.getValorReceber());
             dados.setValorTotal(entrega.getValorTotal());
+            dados.setIdMatriz(entrega.getMatriz().getIdMatriz());
             if(entrega.getDataSelecaoEntrega()!=null) dados.setDataSelecaoEntrega(entrega.getDataSelecaoEntrega().toString());
             if(entrega.getDataCadastroEntrega()!=null) dados.setDataCadastroEntrega(entrega.getDataCadastroEntrega().toString());
             entregaDTOS.add(dados);
@@ -194,12 +209,21 @@ public class EntregaService {
         DadosEntregaDTO dados = new DadosEntregaDTO();
 
         dados.setIdEntrega(entrega.getIdEntrega());
-        if (entrega.getEntregador() != null) {
-            dados.setIdEntregador(entrega.getEntregador().getIdEntregador());
+        if(entrega.getUserAssinatura() != null){
+            dados.setIdUserAssinatura(entrega.getUserAssinatura().getId());
+            dados.setNomeUserAssinatura(entrega.getUserAssinatura().getNome());
         }
         dados.setCupomOrcamento(entrega.getCupomOrcamento());
         dados.setFormaPagamento(entrega.getFormaPagamento());
         dados.setIdUser(entrega.getUser().getId());
+        dados.setNomeUser(entrega.getUser().getNome());
+        if(entrega.getEntregador() != null && entrega.getEntregador().getIdEntregador() != null){
+            dados.setNomeEntregador(entrega.getEntregador().getNome());
+            dados.setIdEntregador(entrega.getEntregador().getIdEntregador());
+        }
+        if(entrega.getMatriz() != null && entrega.getMatriz().getIdMatriz() != null){
+            dados.setIdMatriz(entrega.getMatriz().getIdMatriz());
+        }
         dados.setTroco(entrega.getTroco());
         dados.setValorReceber(entrega.getValorReceber());
         dados.setValorTotal(entrega.getValorTotal());
@@ -208,25 +232,25 @@ public class EntregaService {
         dados.setLatitude(entrega.getLatitude());
         dados.setLongitude(entrega.getLongitude());
         dados.setObservacao(entrega.getObservacao());
+        dados.setStatusEntrega(entrega.getStatusEntrega());
         if(entrega.getDataFinalizacaoEntrega() != null) dados.setDataFinalizacaoEntrega(entrega.getDataFinalizacaoEntrega().toString());
         if(entrega.getDataAssinaturaEntrega() != null) dados.setDataAssinaturaEntrega(entrega.getDataAssinaturaEntrega().toString());
         return dados;
     }
 
-    public void finalizarEntregaManual(List<DadosEntregaDTO> entregaDTOS) {
-        for (DadosEntregaDTO dadosEntregaDTO : entregaDTOS) {
-            Entrega entrega = entregaRepository.findById(dadosEntregaDTO.getIdEntrega()).orElseThrow(()-> new EntityNotFoundException("Entrega não encontrada"));
-            LocalDateTime dataAgora = LocalDateTime.now();
-            entrega.setDataFinalizacaoEntrega(dataAgora);
-            entrega.setStatusEntrega(StatusEntregaEnum.FINALIZADA_MANUAL_ASSINADA.getDescricao());
-        }
+    public void finalizarEntregaManual(Long idEntrega) {
+        Entrega entrega = entregaRepository.findById(idEntrega).orElseThrow(()-> new EntityNotFoundException("Entrega não encontrada"));
+        LocalDateTime dataAgora = LocalDateTime.now();
+        entrega.setDataFinalizacaoEntrega(dataAgora);
+        entrega.setStatusEntrega(StatusEntregaEnum.FINALIZADA_MANUAL.getDescricao());
+
     }
 
     public void cancelarEntrega(Long idEntrega) {
         Entrega entrega = entregaRepository.findById(idEntrega).orElseThrow(() -> new ServiceException("Entrega não encontrada"));
         if (StatusEntregaEnum.FINALIZADA.getDescricao().equals(entrega.getStatusEntrega()) ||
                 StatusEntregaEnum.FINALIZADA_ASSINADA.getDescricao().equals(entrega.getStatusEntrega())
-                || StatusEntregaEnum.FINALIZADA_MANUAL_ASSINADA.getDescricao().equals(entrega.getStatusEntrega())) {
+                || StatusEntregaEnum.FINALIZADA_MANUAL.getDescricao().equals(entrega.getStatusEntrega())) {
             throw new ServiceException("Entrega já assinada, não é permitido exclusão");
         }
         entrega.setStatusEntrega(StatusEntregaEnum.CANCELADA.getDescricao());

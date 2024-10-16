@@ -2,6 +2,7 @@ package br.com.starkstecnologia.control_api.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -10,7 +11,8 @@ import java.util.Objects;
 @Table(schema = "sistema",name = "entrega")
 public class Entrega implements Serializable{
 
-	private static final long serialVersionUID = 1L;
+	@Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "entrega_seq")
@@ -35,8 +37,16 @@ public class Entrega implements Serializable{
     private Usuario user;
 
     @ManyToOne
+    @JoinColumn(name = "id_user_assinatura")
+    private Usuario userAssinatura;
+
+    @ManyToOne
     @JoinColumn(name = "id_entregador")
     private Entregador entregador;
+
+    @ManyToOne
+    @JoinColumn(name = "id_matriz")
+    private Matriz matriz;
 
     private String latitude;
 
@@ -189,16 +199,32 @@ public class Entrega implements Serializable{
         this.statusEntrega = statusEntrega;
     }
 
+    public Matriz getMatriz() {
+        return matriz;
+    }
+
+    public void setMatriz(Matriz matriz) {
+        this.matriz = matriz;
+    }
+
+    public Usuario getUserAssinatura() {
+        return userAssinatura;
+    }
+
+    public void setUserAssinatura(Usuario userAssinatura) {
+        this.userAssinatura = userAssinatura;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Entrega entrega = (Entrega) o;
-        return Objects.equals(idEntrega, entrega.idEntrega) && Objects.equals(dataCadastroEntrega, entrega.dataCadastroEntrega) && Objects.equals(dataAssinaturaEntrega, entrega.dataAssinaturaEntrega) && Objects.equals(dataSelecaoEntrega, entrega.dataSelecaoEntrega) && Objects.equals(dataFinalizacaoEntrega, entrega.dataFinalizacaoEntrega) && Objects.equals(user, entrega.user) && Objects.equals(entregador, entrega.entregador) && Objects.equals(latitude, entrega.latitude) && Objects.equals(longitude, entrega.longitude) && Objects.equals(valorTotal, entrega.valorTotal) && Objects.equals(valorReceber, entrega.valorReceber) && Objects.equals(troco, entrega.troco) && Objects.equals(cupomOrcamento, entrega.cupomOrcamento)  && Objects.equals(formaPagamento, entrega.formaPagamento) && Objects.equals(observacao, entrega.observacao) && Objects.equals(statusEntrega, entrega.statusEntrega);
+        return Objects.equals(idEntrega, entrega.idEntrega) && Objects.equals(dataCadastroEntrega, entrega.dataCadastroEntrega) && Objects.equals(dataAssinaturaEntrega, entrega.dataAssinaturaEntrega) && Objects.equals(dataSelecaoEntrega, entrega.dataSelecaoEntrega) && Objects.equals(dataFinalizacaoEntrega, entrega.dataFinalizacaoEntrega) && Objects.equals(user, entrega.user) && Objects.equals(userAssinatura, entrega.userAssinatura) && Objects.equals(entregador, entrega.entregador) && Objects.equals(matriz, entrega.matriz) && Objects.equals(latitude, entrega.latitude) && Objects.equals(longitude, entrega.longitude) && Objects.equals(valorTotal, entrega.valorTotal) && Objects.equals(valorReceber, entrega.valorReceber) && Objects.equals(troco, entrega.troco) && Objects.equals(cupomOrcamento, entrega.cupomOrcamento) && Objects.equals(formaPagamento, entrega.formaPagamento) && Objects.equals(observacao, entrega.observacao) && Objects.equals(statusEntrega, entrega.statusEntrega);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idEntrega, dataCadastroEntrega, dataAssinaturaEntrega, dataSelecaoEntrega, dataFinalizacaoEntrega, user, entregador, latitude, longitude, valorTotal, valorReceber, troco, cupomOrcamento,  formaPagamento, observacao, statusEntrega);
+        return Objects.hash(idEntrega, dataCadastroEntrega, dataAssinaturaEntrega, dataSelecaoEntrega, dataFinalizacaoEntrega, user, userAssinatura, entregador, matriz, latitude, longitude, valorTotal, valorReceber, troco, cupomOrcamento, formaPagamento, observacao, statusEntrega);
     }
 }

@@ -1,6 +1,7 @@
 package br.com.starkstecnologia.control_api.web.controller;
 
 
+import br.com.starkstecnologia.control_api.dto.DadosAtribuirFinalizarEntregaDTO;
 import br.com.starkstecnologia.control_api.dto.DadosEntregaDTO;
 import br.com.starkstecnologia.control_api.services.EntregaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,8 +23,7 @@ public class EntregaEndpoint {
 
     @PostMapping
     public ResponseEntity<?> salvarEntrega(@RequestBody DadosEntregaDTO dadosEntregaDTO){
-        entregaService.salvarEntrega(dadosEntregaDTO);
-        return ResponseEntity.status(201).build();
+        return ResponseEntity.status(201).body(entregaService.salvarEntrega(dadosEntregaDTO));
     }
 
     @PutMapping("/alterar")
@@ -32,21 +32,21 @@ public class EntregaEndpoint {
         return ResponseEntity.status(200).build();
     }
 
-    @PutMapping(value = "/assinar/{idCaixa}")
-    public ResponseEntity<?> assinarEntregas(@RequestBody List<DadosEntregaDTO> entregaDTOList, @PathVariable("idCaixa") Long idCaixa){
-        entregaService.assinarEntregaCaixa(entregaDTOList, idCaixa);
+    @PutMapping(value = "/assinar/{idEntrega}")
+    public ResponseEntity<?> assinarEntregas(@RequestBody DadosAtribuirFinalizarEntregaDTO entregaDTO, @PathVariable("idEntrega") Long idEntrega){
+        entregaService.assinarEntregaCaixa(entregaDTO, idEntrega);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(value = "/atribuir/{user_id}")
-    public ResponseEntity<?> selecionarEntrega(@RequestBody List<DadosEntregaDTO> entregaDTOS,@PathVariable("user_id") String userId){
-        entregaService.selecionarAtribuirAlterarEntrega(entregaDTOS, userId);
+    @PutMapping(value = "/atribuir/{idEntrega}")
+    public ResponseEntity<?> selecionarEntrega(@RequestBody DadosAtribuirFinalizarEntregaDTO entregaDTO, @PathVariable("idEntrega") Long idEntrega){
+        entregaService.selecionarAtribuirAlterarEntrega(entregaDTO, idEntrega);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping(value = "/finalizar")
-    public ResponseEntity<?> finalizarEntregaManual(@RequestBody List<DadosEntregaDTO> entregaDTOS){
-        entregaService.finalizarEntregaManual(entregaDTOS);
+    @PutMapping(value = "/finalizar/{idEntrega}")
+    public ResponseEntity<?> finalizarEntregaManual(@PathVariable("idEntrega") Long idEntrega ){
+        entregaService.finalizarEntregaManual(idEntrega);
         return ResponseEntity.ok().build();
     }
 
@@ -62,8 +62,6 @@ public class EntregaEndpoint {
                                              @RequestParam(required = false) LocalDateTime dataTermino){
        return ResponseEntity.ok(entregaService.buscarEntregas(idEntrega, dataInicio, dataTermino));
     }
-
-
 
     @GetMapping("/avulsas")
     public ResponseEntity<?> buscarTodasEntregasAvulsas(){

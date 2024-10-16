@@ -28,6 +28,16 @@ public class Usuario implements Serializable {
     @Column(name = "password", nullable = false, length = 200)
     private String password;
 
+    private String nome;
+
+    private boolean ativo;
+
+    private String turno;
+
+    private String telefone;
+
+    private String cpf;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 25)
     private Role role = Role.ROLE_CLIENTE;
@@ -112,16 +122,56 @@ public class Usuario implements Serializable {
         this.alteradoPor = alteradoPor;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public String getTurno() {
+        return turno;
+    }
+
+    public void setTurno(String turno) {
+        this.turno = turno;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Usuario usuario = (Usuario) o;
-        return Objects.equals(id, usuario.id) && Objects.equals(username, usuario.username) && Objects.equals(password, usuario.password) && role == usuario.role && Objects.equals(dataCriacao, usuario.dataCriacao) && Objects.equals(dataAlteracao, usuario.dataAlteracao) && Objects.equals(criadoPor, usuario.criadoPor) && Objects.equals(alteradoPor, usuario.alteradoPor);
+        return ativo == usuario.ativo && Objects.equals(id, usuario.id) && Objects.equals(username, usuario.username) && Objects.equals(password, usuario.password) && Objects.equals(nome, usuario.nome) && Objects.equals(turno, usuario.turno) && Objects.equals(telefone, usuario.telefone) && Objects.equals(cpf, usuario.cpf) && role == usuario.role && Objects.equals(dataCriacao, usuario.dataCriacao) && Objects.equals(dataAlteracao, usuario.dataAlteracao) && Objects.equals(criadoPor, usuario.criadoPor) && Objects.equals(alteradoPor, usuario.alteradoPor);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, role, dataCriacao, dataAlteracao, criadoPor, alteradoPor);
+        return Objects.hash(id, username, password, nome, ativo, turno, telefone, cpf, role, dataCriacao, dataAlteracao, criadoPor, alteradoPor);
     }
 }

@@ -7,6 +7,9 @@ import br.com.starkstecnologia.control_api.exception.UsernameUniqueViolationExce
 import br.com.starkstecnologia.control_api.repository.UsuarioRepository;
 
 import br.com.starkstecnologia.control_api.types.Role;
+import br.com.starkstecnologia.control_api.web.controller.UsuarioController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +18,8 @@ import java.util.List;
 
 @Service
 public class UsuarioService {
+
+    private static final Logger log = LoggerFactory.getLogger(UsuarioController.class);
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
@@ -36,6 +41,7 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public Usuario buscarPorId(Long id){
+        log .info("Entrando no método de retornar Usuario ");
         return usuarioRepository.findById(id).orElseThrow(()-> new EntityNotFoundException(String.format("Usuário id=%s não encontrado", id)));
     }
 
